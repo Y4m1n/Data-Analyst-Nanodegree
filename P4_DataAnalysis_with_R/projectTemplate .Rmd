@@ -222,14 +222,15 @@ dt.oc<-dt.c%>%
   summarise(n=n())%>%
   arrange(desc(n))
 
-
 #plot
-ggplot(subset(dt.oc,n>1000),aes(x=contbr_occupation, y=n,fill=contbr_occupation))+
+ggplot(subset(dt.oc,n>500),aes(x=reorder(contbr_occupation,n), y=n,fill=contbr_occupation))+
   geom_col(width=1, color="white")+
   geom_text(aes(label=n), color="black",
                    hjust=1.0, size=3)+
   theme(legend.position="none")+
   coord_flip()
+#加上占比的线
+#标签优化
 ```
 
 
