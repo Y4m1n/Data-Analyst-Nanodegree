@@ -1,6 +1,151 @@
-TITLE by YOUR_NAME_HERE
+Donald Trump's Contributor Analysis by Yamin
 ========================================================
+Data Description
+--------------------------------------------------------------- 
 
+CMTE_ID			COMMITTEE ID				S
+CAND_ID			CANDIDATE ID				S
+CAND_NM			CANDIDATE NAME				S
+CONTBR_NM		CONTRIBUTOR NAME			S
+CONTBR_CITY		CONTRIBUTOR CITY			S
+CONTBR_ST		CONTRIBUTOR STATE			S
+CONTBR_ZIP		CONTRIBUTOR ZIP CODE			S
+CONTBR_EMPLOYER		CONTRIBUTOR EMPLOYER			S
+CONTBR_OCCUPATION	CONTRIBUTOR OCCUPATION			S
+CONTB_RECEIPT_AMT	CONTRIBUTION RECEIPT AMOUNT		N
+CONTB_RECEIPT_DT	CONTRIBUTION RECEIPT DATE		D	
+RECEIPT_DESC		RECEIPT DESCRIPTION			S
+MEMO_CD			MEMO CODE				S
+MEMO_TEXT		MEMO TEXT				S
+FORM_TP			FORM TYPE				S
+FILE_NUM		FILE NUMBER				N
+TRAN_ID			TRANSACTION ID				S
+ELECTION_TP		ELECTION TYPE/PRIMARY GENERAL INDICATOR S
+
+
+Data Type:  S = string (alpha or alpha-numeric); D = date; N = numeric  
+
+--------------------------------------------------------------- 
+
+Variable Documentation 
+
+
+COMMITTEE ID  
+String   
+
+A 9-character alpha-numeric code assigned to a committee by the Federal Election Commission. 
+
+---------
+CANDIDATE ID  
+String   
+
+A 9-character alpha-numeric code assigned to a candidate by the Federal Election Commission. 
+
+---------
+CANDIDATE NAME
+String
+
+---------
+CONTRIBUTOR NAME
+String
+
+Reported name of the contributor.
+
+---------
+CONTRIBUTOR CITY
+String
+
+Reported city of the contributor.
+
+---------
+CONTRIBUTOR STATE
+String
+
+Reported state of the contributor.
+
+---------
+CONTRIBUTOR ZIP CODE
+String
+
+Reported zip code of the contributor.
+
+---------
+CONTRIBUTOR EMPLOYER
+String
+
+Reported employer of the contributor.
+
+---------
+CONTRIBUTOR OCCUPATION
+String
+
+Reported occupation of the contributor.
+
+---------
+CONTRIBUTION RECEIPT AMOUNT
+Numeric
+
+Reported contribution amount.
+
+---------
+CONTRIBUTION RECEIPT DATE
+Date	
+
+Reported contribution receipt date.  The date format is DD-MMM-YYYY.
+
+---------
+RECEIPT DESCRIPTION
+String
+
+Additional information reported by the committee about a specific contribution. 
+
+---------
+MEMO CODE
+String
+
+'X' indicates the reporting committee has provided additional text to describe a specific contribution.  See the MEMO TEXT.  
+
+---------
+MEMO TEXT
+String
+
+Additional information reported by the committee about a specific contribution.  
+
+---------
+FORM TYPE
+Sting
+
+Indicates what schedule and line number the reporting committee reported a specific transaction.   
+SA17A:  Form 3P Schedule A Line 17A
+SA18:   Form 3P Schedule A Line 18
+SB28A:  Form 3P Schedule B Line 28A  
+
+---------
+FILE NUMBER
+Numeric
+
+A unique number assigned to a report and all its associated transactions.   
+Use the file number to link transactions to the report summaries (Form 3P) in REPORT_SUMMARIES_FORM_3P.ZIP on the FEC's FTP server.  
+ftp://ftp.fec.gov/FEC/Presidential_Map/
+
+---------
+TRANSACTION ID
+String
+
+A unique identifier permanently associated with each itemization or transaction appearing in an FEC electronic file.
+
+---------
+ELECTION TYPE / PRIMARY-GENERAL INDICATOR
+String 
+
+This code indicates the election for which the contribution was made. EYYYY (election plus election year)
+P = Primary
+G = General
+O = Other
+C = Convention
+R = Runoff
+S = Special
+E = Recount
 ```{r echo=FALSE, message=FALSE, warning=FALSE, packages}
 # Load all of the packages that you end up using
 # in your analysis in this code chunk.
@@ -10,21 +155,58 @@ TITLE by YOUR_NAME_HERE
 # You should set echo=FALSE for all code chunks in your file.
 
 library(ggplot2)
+library(dplyr)
+library()
 ```
 
 ```{r echo=FALSE, Load_the_Data}
 # Load the Data
-dt<-read.csv('/Users/apple/DAND/P4_DataAnalysis_with_R/P80001571-ALL.csv',row.names = NULL)
+dt<-read.csv('/Users/apple/DAND/P4_DataAnalysis_with_R/P80001571-ALL.csv',header = T, row.names = NULL)
+#fix the column names
 c <- colnames(dt)
 c <- c[2:length(c)]
 colnames(dt) <- c
-names(dt)
+str(dt)
+```
+# Data wrangling 
+## fix the data types
+```{r}
+#character to date
+head(as.Date(dt$contb_receipt_dt,format='%d-%b-%y'))
+```
+## clean the data
+```{r}
+#change negative receipt amount to positive
+dt$contb_receipt_amt<-abs(dt$contb_receipt_amt)
 ```
 
 # Univariate Plots Section
+```{r}
+#by contributor
+dt.c<-dt%>%
+  group_by(contbr_nm,contbr_occupation)%>%
+  summarise(total_amount=sum(contb_receipt_amt),
+            frequency=n())
+```
+
+## Time
 ```{r echo=FALSE, Univariate_Plots}
 
 ```
+## Frequency
+```{r}
+summary(dt.c$frequency)
+```
+从数据来看捐一次的最多,最高78次
+```{r}
+ggplot(data=dt.c,aes(frequency,color=frequency))+
+  geom_histogram(binwidth = 1)+
+#transform the coord
+  coord_trans(y='sqrt')+
+  scale_x_continuous(breaks=seq(1,78),'times per contributor')+
+  scale_color_brewer(palette = 'Reds')
+```
+
 
 # Univariate Analysis
 
