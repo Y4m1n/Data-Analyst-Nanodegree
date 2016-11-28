@@ -156,7 +156,6 @@ E = Recount
 
 library(ggplot2)
 library(dplyr)
-library()
 ```
 
 ```{r echo=FALSE, Load_the_Data}
@@ -184,7 +183,7 @@ dt$contb_receipt_amt<-abs(dt$contb_receipt_amt)
 ```{r}
 #by contributor
 dt.c<-dt%>%
-  group_by(contbr_nm,contbr_occupation)%>%
+  group_by(contbr_nm,contbr_zip,contbr_employer,contbr_occupation)%>%
   summarise(total_amount=sum(contb_receipt_amt),
             frequency=n())
 ```
@@ -199,12 +198,38 @@ summary(dt.c$frequency)
 ```
 从数据来看捐一次的最多,最高78次
 ```{r}
-ggplot(data=dt.c,aes(frequency,color=frequency))+
+ggplot(data=dt.c,aes(frequency,fill=frequency))+
   geom_histogram(binwidth = 1)+
 #transform the coord
   coord_trans(y='sqrt')+
   scale_x_continuous(breaks=seq(1,78),'times per contributor')+
-  scale_color_brewer(palette = 'Reds')
+  scale_fill_brewer(palette = 'Reds')
+```
+### Find the biggest fan
+```{r}
+subset(dt.c,frequency==max(frequency))
+```
+##Amount
+```{r}
+
+```
+
+## Occupation
+```{r}
+dt.oc<-dt.c%>%
+  subset(!is.na(dt.c$contbr_occupation) & length(dt.c$contbr_occupation)>1)%>%
+  group_by(contbr_occupation)%>%
+  summarise(n=n())%>%
+  arrange(desc(n))
+
+
+#plot
+ggplot(subset(dt.oc,n>1000),aes(x=contbr_occupation, y=n,fill=contbr_occupation))+
+  geom_col(width=1, color="white")+
+  geom_text(aes(label=n), color="black",
+                   hjust=1.0, size=3)+
+  theme(legend.position="none")+
+  coord_flip()
 ```
 
 
