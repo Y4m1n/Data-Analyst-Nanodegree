@@ -230,6 +230,13 @@ find some dirty data.
 dt$contbr_occupation[dt$contbr_occupation=='RN'|dt$contbr_occupation=='NURSE']<-'REGISTERED NURSE'
 #SELF-EMPLOYED
 dt$contbr_occupation[dt$contbr_occupation=='SELF EMPLOYED']<-'SELF-EMPLOYED'
+#BUSINESS OWNER
+dt$contbr_occupation[grepl('OWNER',dt$contbr_occupation)]<-'BUSINESS OWNER'
+#REALTOR
+dt$contbr_occupation[grepl('REAL',dt$contbr_occupation)]<-'REALTOR'
+
+
+#MANAGER
 
 #plot
 ggplot(subset(dt.oc,n>500),aes(x=reorder(contbr_occupation,n), y=n,fill=contbr_occupation))+
