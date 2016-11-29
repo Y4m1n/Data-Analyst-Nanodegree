@@ -216,11 +216,20 @@ subset(dt.c,frequency==max(frequency))
 
 ## Occupation
 ```{r}
+#subset the data
 dt.oc<-dt.c%>%
-  subset(!is.na(dt.c$contbr_occupation) & length(dt.c$contbr_occupation)>1)%>%
   group_by(contbr_occupation)%>%
   summarise(n=n())%>%
   arrange(desc(n))
+dt.oc
+```
+find some dirty data.
+### Clean the data
+```{r}
+#REGISTERED NURSE
+dt$contbr_occupation[dt$contbr_occupation=='RN'|dt$contbr_occupation=='NURSE']<-'REGISTERED NURSE'
+#SELF-EMPLOYED
+dt$contbr_occupation[dt$contbr_occupation=='SELF EMPLOYED']<-'SELF-EMPLOYED'
 
 #plot
 ggplot(subset(dt.oc,n>500),aes(x=reorder(contbr_occupation,n), y=n,fill=contbr_occupation))+
@@ -228,9 +237,13 @@ ggplot(subset(dt.oc,n>500),aes(x=reorder(contbr_occupation,n), y=n,fill=contbr_o
   geom_text(aes(label=n), color="black",
                    hjust=1.0, size=3)+
   theme(legend.position="none")+
-  coord_flip()
-#加上占比的线
+  coord_flip()+
 #标签优化
+  xlab('Occupation')+
+  ylab('Number of People')
+#加上占比的线
+
+
 ```
 
 
