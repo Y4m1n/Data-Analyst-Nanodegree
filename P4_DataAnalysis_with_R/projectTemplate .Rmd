@@ -220,7 +220,8 @@ subset(dt.c,frequency==max(frequency))
 dt.oc<-dt.c%>%
   group_by(contbr_occupation)%>%
   summarise(n=n())%>%
-  arrange(desc(n))
+  arrange(desc(n))%>%
+  mutate(percentage=n/sum(n))
 dt.oc
 ```
 find some dirty data.
@@ -253,7 +254,7 @@ dt$contbr_occupation[grepl('DENTIST',dt$contbr_occupation)]<-'DENTIST'
 #PHYSICIAN
 dt$contbr_occupation[grepl('PHYSICIAN',dt$contbr_occupation)]<-'PHYSICIAN'
 ```
-
+### Plotting
 ```{R}
 #plot
 ggplot(subset(dt.oc,n>500),aes(x=reorder(contbr_occupation,n), y=n,fill=contbr_occupation))+
@@ -265,12 +266,8 @@ ggplot(subset(dt.oc,n>500),aes(x=reorder(contbr_occupation,n), y=n,fill=contbr_o
 #标签优化
   xlab('Occupation')+
   ylab('Number of People')
-#加上占比的线
-
-
 ```
-
-
+观察得，退休的最多，做小生意的其次。
 # Univariate Analysis
 
 ### What is the structure of your dataset?
