@@ -229,15 +229,29 @@ find some dirty data.
 #REGISTERED NURSE
 dt$contbr_occupation[dt$contbr_occupation=='RN'|dt$contbr_occupation=='NURSE']<-'REGISTERED NURSE'
 #SELF-EMPLOYED
-dt$contbr_occupation[dt$contbr_occupation=='SELF EMPLOYED']<-'SELF-EMPLOYED'
+dt$contbr_occupation[grepl('SELF',dt$contbr_occupation)]<-'SELF-EMPLOYED'
 #BUSINESS OWNER
 dt$contbr_occupation[grepl('OWNER',dt$contbr_occupation)]<-'BUSINESS OWNER'
 #REALTOR
 dt$contbr_occupation[grepl('REAL',dt$contbr_occupation)]<-'REALTOR'
+#TEACHER
+dt$contbr_occupation[grepl('TEACHER',dt$contbr_occupation)]<-'TEACHER'
+#INSURANCE
+dt$contbr_occupation[grepl('INSURANCE',dt$contbr_occupation)]<-'INSURANCE'
+#SALES
+dt$contbr_occupation[grepl('SALES',dt$contbr_occupation)]<-'SALES'
+#FARMER/RANCHER
+dt$contbr_occupation[grepl('FARM',dt$contbr_occupation)|grepl('RANCH',dt$contbr_occupation)]<-'FARMER/RANCHER'
+#TRUCK DRIVER
+dt$contbr_occupation[grepl('TRUCK',dt$contbr_occupation)]<-'TRUCK DRIVER'
+#ACCOUNTANT
+dt$contbr_occupation[grepl('ACCOUNT',dt$contbr_occupation)|grepl('CPA',dt$contbr_occupation)]<-'ACCOUNTANT'
+#LAWYER
+dt$contbr_occupation[grepl('ATTORNEY',dt$contbr_occupation)]<-'LAWYER'
 
+```
 
-#MANAGER
-
+```{R}
 #plot
 ggplot(subset(dt.oc,n>500),aes(x=reorder(contbr_occupation,n), y=n,fill=contbr_occupation))+
   geom_col(width=1, color="white")+
