@@ -1,6 +1,6 @@
 Donald Trump's Contributor Analysis by Yamin
 ========================================================
-Data Description
+#Data Description
 --------------------------------------------------------------- 
 
 CMTE_ID			COMMITTEE ID				S
@@ -27,7 +27,7 @@ Data Type:  S = string (alpha or alpha-numeric); D = date; N = numeric
 
 --------------------------------------------------------------- 
 
-Variable Documentation 
+## Variable Documentation 
 
 
 COMMITTEE ID  
@@ -171,7 +171,7 @@ str(dt)
 ## fix the data types
 ```{r}
 #character to date
-head(as.Date(dt$contb_receipt_dt,format='%d-%b-%y'))
+dt$contb_receipt_dt<-as.Date(dt$contb_receipt_dt,format='%d-%b-%y')
 ```
 ## clean the data
 ```{r}
@@ -190,7 +190,10 @@ dt.c<-dt%>%
 
 ## Time
 ```{r echo=FALSE, Univariate_Plots}
-
+#outlier
+dt.t<-dt[(format(dt$contb_receipt_dt,format = "%Y")=="2015"|format(dt$contb_receipt_dt,format = "%Y")=="2016"),]
+ggplot(dt.t,aes(contb_receipt_dt))+
+  geom_freqpoly()
 ```
 ## Frequency
 ```{r}
@@ -268,19 +271,6 @@ ggplot(subset(dt.oc,n>500),aes(x=reorder(contbr_occupation,n), y=n,fill=contbr_o
   ylab('Number of People')
 ```
 观察得，退休的最多，做小生意的其次。
-# Univariate Analysis
-
-### What is the structure of your dataset?
-
-### What is/are the main feature(s) of interest in your dataset?
-
-### What other features in the dataset do you think will help support your investigation into your feature(s) of interest?
-
-### Did you create any new variables from existing variables in the dataset?
-
-### Of the features you investigated, were there any unusual distributions? Did you perform any operations on the data to tidy, adjust, or change the form of the data? If so, why did you do this?
-
-
 
 # Bivariate Plots Section
 ```{r echo=FALSE, Bivariate_Plots}
