@@ -248,7 +248,10 @@ dt$contbr_occupation[grepl('TRUCK',dt$contbr_occupation)]<-'TRUCK DRIVER'
 dt$contbr_occupation[grepl('ACCOUNT',dt$contbr_occupation)|grepl('CPA',dt$contbr_occupation)]<-'ACCOUNTANT'
 #LAWYER
 dt$contbr_occupation[grepl('ATTORNEY',dt$contbr_occupation)]<-'LAWYER'
-
+#DENTIST
+dt$contbr_occupation[grepl('DENTIST',dt$contbr_occupation)]<-'DENTIST'
+#PHYSICIAN
+dt$contbr_occupation[grepl('PHYSICIAN',dt$contbr_occupation)]<-'PHYSICIAN'
 ```
 
 ```{R}
