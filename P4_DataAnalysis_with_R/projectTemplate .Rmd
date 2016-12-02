@@ -183,7 +183,7 @@ dt$contb_receipt_amt<-abs(dt$contb_receipt_amt)
 ```{r}
 #by contributor
 dt.c<-dt%>%
-  group_by(contbr_nm,contbr_zip,contbr_employer,contbr_occupation)%>%
+  group_by(contbr_nm,contbr_st,contbr_employer,contbr_occupation)%>%
   summarise(total_amount=sum(contb_receipt_amt),
             frequency=n())
 ```
@@ -274,7 +274,21 @@ ggplot(subset(dt.oc,n>500),aes(x=reorder(contbr_occupation,n), y=n,fill=contbr_o
   xlab('Occupation')+
   ylab('Number of People')
 ```
+
 观察得，退休的最多，自己做生意的其次,还有很多卡车司机，木工，管道工等等工人阶级。
+## State
+```{r}
+install.packages("choroplethr")
+install.packages('choroplethrMaps')
+library(choroplethr)
+library(choroplethrMaps)
+#选出数据
+dt.l<-dt.c %>% 
+  group_by(contbr_st) %>% 
+  dplyr::summarise(n=n())%>%
+  filter(contbr_st %in% state.abb)
+
+```
 
 # Bivariate Plots Section
 ```{r}
