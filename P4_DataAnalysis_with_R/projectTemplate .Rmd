@@ -287,7 +287,14 @@ dt.l<-dt.c %>%
   group_by(contbr_st) %>% 
   dplyr::summarise(n=n())%>%
   filter(contbr_st %in% state.abb)
-
+#改变量名符合choroplethr规范
+colnames(dt.l)=c('region','value')
+dt.l$region<-as.character(dt.l$region)
+#替换州名为全写
+data(state.regions)
+dt.l$region<-state.regions$region[match(dt.l$region,state.abb)]
+#生成
+state_choropleth(dt.l,title = "Contributors to Donald Trump", legend = "Contributor")
 ```
 
 # Bivariate Plots Section
