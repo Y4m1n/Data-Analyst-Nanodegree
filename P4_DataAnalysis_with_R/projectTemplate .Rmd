@@ -205,7 +205,7 @@ ggplot(data=dt.c,aes(frequency,fill=frequency))+
   geom_histogram(binwidth = 1)+
 #transform the coord
   coord_trans(y='sqrt')+
-  scale_x_continuous(breaks=seq(1,78),'times per contributor')+
+  scale_x_continuous(breaks=seq(1,78,2),'times per contributor')+
   scale_fill_brewer(palette = 'Reds')
 ```
 ### Find the biggest fan
@@ -274,9 +274,31 @@ ggplot(subset(dt.oc,n>500),aes(x=reorder(contbr_occupation,n), y=n,fill=contbr_o
   xlab('Occupation')+
   ylab('Number of People')
 ```
-观察得，退休的最多，做小生意的其次。
+观察得，退休的最多，自己做生意的其次,还有很多卡车司机，木工，管道工等等工人阶级。
 
 # Bivariate Plots Section
+## Zipcode vs. Contributor
+```{r}
+install.packages("devtools")
+library(devtools)
+library(httr)
+with_config(use_proxy('127.0.0.1:9743'), install_github('arilamstein/choroplethrZip@v1.5.0'))
+#install_github('arilamstein/choroplethrZip@v1.5.0')
+library(choroplethrZip)
+#符合choroplethr格式
+dt.zip<-dt.c %>% 
+  group_by(contbr_zip) %>% 
+  summarise(n=n())
+#改变量名
+colnames(dt.zip)=c('region','value')
+
+#ZipChoropleth object
+choro = ZipChoropleth$new(dt.zip)
+
+
+```
+
+## Occupation vs. Amount
 ```{r echo=FALSE, Bivariate_Plots}
 
 ```
@@ -299,6 +321,7 @@ ggplot(subset(dt.oc,n>500),aes(x=reorder(contbr_occupation,n), y=n,fill=contbr_o
 ```
 
 # Multivariate Analysis
+## Zipcode vs. Contributors vs. Amount
 
 ### Talk about some of the relationships you observed in this part of the investigation. Were there features that strengthened each other in terms of looking at your feature(s) of interest?
 
