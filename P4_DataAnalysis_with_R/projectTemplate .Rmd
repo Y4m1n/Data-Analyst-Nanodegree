@@ -319,9 +319,21 @@ state_choropleth(dt.l,title = "Contributors to Donald Trump", legend = "Contribu
 
 ```
 
-## Occupation vs. Amount
+## State vs. Amount
 ```{r echo=FALSE, Bivariate_Plots}
-
+#选出数据
+dt.st_amt<-dt.c %>% 
+  group_by(contbr_st) %>% 
+  dplyr::summarise(amount=sum(total_amount))%>%
+  filter(contbr_st %in% state.abb)
+#改变量名符合choroplethr规范
+colnames(dt.st_amt)=c('region','value')
+dt.st_amt$region<-as.character(dt.st_amt$region)
+#替换州名为全写
+data(state.regions)
+dt.st_amt$region<-state.regions$region[match(dt.st_amt$region,state.abb)]
+#生成
+state_choropleth(dt.st_amt,title = "Contribution to Donald Trump by Amount", legend = "Amount")
 ```
 
 # Bivariate Analysis
