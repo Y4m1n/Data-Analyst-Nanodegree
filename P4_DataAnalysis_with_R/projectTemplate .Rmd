@@ -1,3 +1,8 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
 Donald Trump's Contributor Analysis by Yamin
 ========================================================
 #Data Description
@@ -190,10 +195,11 @@ dt.c<-dt%>%
 
 ## Time
 ```{r echo=FALSE, Univariate_Plots}
-#outlier
-dt.t<-dt[(format(dt$contb_receipt_dt,format = "%Y")=="2015"|format(dt$contb_receipt_dt,format = "%Y")=="2016"),]
+dt.t<-dt[format(dt$contb_receipt_dt,format = "%Y")=="2016",]
 ggplot(dt.t,aes(contb_receipt_dt))+
-  geom_freqpoly()
+  geom_freqpoly()+
+  scale_x_date(date_breaks = '1 month',date_labels='%b')+
+  xlab('Time')
 ```
 ## Frequency
 ```{r}
@@ -339,7 +345,6 @@ state_choropleth(dt.st_amt,title = "Contribution to Donald Trump by Amount", leg
 # Bivariate Analysis
 
 ### Talk about some of the relationships you observed in this part of the investigation. How did the feature(s) of interest vary with other features in the dataset?
-
 ### Did you observe any interesting relationships between the other features (not the main feature(s) of interest)?
 
 ### What was the strongest relationship you found?
