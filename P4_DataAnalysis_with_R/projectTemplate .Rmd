@@ -198,7 +198,7 @@ dt.c<-dt%>%
 dt.t<-dt[format(dt$contb_receipt_dt,format = "%Y")=="2016",]
 ggplot(dt.t,aes(contb_receipt_dt))+
   geom_freqpoly()+
-  scale_x_date(date_breaks = '1 month',date_labels='%b')+
+  scale_x_date(date_breaks = '1 month',date_labels='%b',date_minor_breaks = "1 day")+
   xlab('Time')
 ```
 ## Frequency
